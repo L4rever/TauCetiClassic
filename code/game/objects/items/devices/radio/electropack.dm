@@ -10,6 +10,7 @@
 	g_amt = 2500
 	m_amt = 10000
 	var/code = 2
+	var/shock_time = 10;
 
 /obj/item/device/radio/electropack/attack_hand(mob/user)
 	if(src == user.back)
@@ -96,8 +97,8 @@
 		s.set_up(3, 1, M)
 		s.start()
 
-		M.Stun(10)
-		M.Weaken(10)
+		M.Stun(shock_time)
+		M.Weaken(shock_time)
 
 	if(master && !wires.is_index_cut(RADIO_WIRE_SIGNAL))
 		master.receive_signal()

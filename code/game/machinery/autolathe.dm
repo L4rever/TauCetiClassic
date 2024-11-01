@@ -135,6 +135,7 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes = list(
 
 var/global/list/datum/autolathe_recipe/autolathe_recipes_hidden = list(
 	R(/obj/item/device/radio/electropack, CATEGORY_DEVICES),
+	R(/obj/item/device/radio/electropack/shockcollar, CATEGORY_DEVICES),
 	R(/obj/item/device/harmonica, CATEGORY_DEVICES),
 	R(/obj/item/weapon/handcuffs, CATEGORY_GENERAL),
 	R(/obj/item/weapon/bell, CATEGORY_GENERAL),
