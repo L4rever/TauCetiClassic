@@ -12,3 +12,7 @@
 	m_amt = 5000
 	code = 3
 	shock_time = 1
+	can_unequip = TRUE
+
+/obj/item/device/radio/electropack/shockcollar/attackby(obj/item/I, mob/user)
+	return

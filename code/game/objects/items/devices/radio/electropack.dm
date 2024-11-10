@@ -10,10 +10,11 @@
 	g_amt = 2500
 	m_amt = 10000
 	var/code = 2
-	var/shock_time = 10;
+	var/shock_time = 10
+	var/can_unequip = FALSE
 
 /obj/item/device/radio/electropack/attack_hand(mob/user)
-	if(src == user.back)
+	if(src == user.back && !can_unequip)
 		to_chat(user, "<span class='notice'>You need help taking this off!</span>")
 		return
 	..()
