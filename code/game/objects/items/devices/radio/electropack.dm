@@ -11,6 +11,32 @@
 	m_amt = 10000
 	var/code = 2
 
+/obj/item/device/radio/electropack/atom_init()
+	. = ..()
+	AddComponent(/datum/component/signal_receive, frequency, code, CALLBACK(src, PROC_REF(on_trigger)), CALLBACK(src, PROC_REF(can_trigger)))
+
+/obj/item/device/radio/electropack/proc/can_trigger()
+	return on
+
+/obj/item/device/radio/electropack/proc/on_trigger()
+	if(ismob(loc))
+		var/mob/M = loc
+		var/turf/T = M.loc
+		if(istype(T, /turf))
+			if(!M.moved_recently && M.last_move)
+				M.moved_recently = 1
+				step(M, M.last_move)
+				sleep(50)
+				if(M)
+					M.moved_recently = 0
+		to_chat(M, "<span class='danger'>You feel a sharp shock!</span>")
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(3, 1, M)
+		s.start()
+
+		M.Stun(10)
+		M.Weaken(10)
+
 /obj/item/device/radio/electropack/attack_hand(mob/user)
 	if(src == user.back)
 		to_chat(user, "<span class='notice'>You need help taking this off!</span>")
@@ -54,6 +80,7 @@
 				code = round(code)
 				code = min(100, code)
 				code = max(1, code)
+				SEND_SIGNAL(src, COMSIG_RADIO_CHANGE_CODE, code)
 			else
 				if(href_list["power"])
 					on = !( on )
@@ -81,26 +108,8 @@
 	if(!signal || signal.encryption != code)
 		return
 
-	if(ismob(loc) && on)
-		var/mob/M = loc
-		var/turf/T = M.loc
-		if(istype(T, /turf))
-			if(!M.moved_recently && M.last_move)
-				M.moved_recently = 1
-				step(M, M.last_move)
-				sleep(50)
-				if(M)
-					M.moved_recently = 0
-		to_chat(M, "<span class='danger'>You feel a sharp shock!</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(3, 1, M)
-		s.start()
-
-		M.Stun(10)
-		M.Weaken(10)
-
 	if(master && !wires.is_index_cut(RADIO_WIRE_SIGNAL))
-		master.receive_signal()
+		master.handle_signal()
 	return
 
 /obj/item/device/radio/electropack/attack_self(mob/user, flag1)
