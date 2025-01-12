@@ -444,3 +444,9 @@
 	#define COMPONENT_CLIENT_MOUSEUP_INTERCEPT (1<<0)
 //from base of client/MouseUp(): (/client, object, location, control, params)
 #define COMSIG_CLIENT_MOUSEDRAG "client_mousedrag"
+
+//from base of obj/proc/handle_signal(): (/datum, /datum/signal, receive_method, receive_param)
+#define COMSIG_RADIO_RECEIVE_SIGNAL "radio_receive_signal"
+//from base of /obj/item/device/radio/set_frequency(): (/obj/item/device/radio, frequency)
+#define COMSIG_RADIO_CHANGE_FREQUENCY "radio_change_frequency"
+#define COMSIG_RADIO_CHANGE_CODE "radio_change_code"

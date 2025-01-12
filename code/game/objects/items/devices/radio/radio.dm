@@ -44,6 +44,7 @@ var/global/GLOBAL_RADIO_TYPE = 1 // radio type to use
 /obj/item/device/radio/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
+	SEND_SIGNAL(src, COMSIG_RADIO_CHANGE_FREQUENCY, frequency)
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/radio/atom_init()
@@ -346,11 +347,11 @@ var/global/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		  //#### Sending the signal to all subspace receivers ####//
 
 			for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
-				R.receive_signal(signal)
+				R.handle_signal(signal)
 
 			// Allinone can act as receivers.
 			for(var/obj/machinery/telecomms/allinone/R in telecomms_list)
-				R.receive_signal(signal)
+				R.handle_signal(signal)
 
 			// Receiving code can be located in Telecommunications.dm
 
@@ -402,7 +403,7 @@ var/global/GLOBAL_RADIO_TYPE = 1 // radio type to use
 		signal.frequency = connection.frequency // Quick frequency set
 
 		for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
-			R.receive_signal(signal)
+			R.handle_signal(signal)
 
 		if(signal.data["done"] && (position.z in signal.data["level"]))
 			// we're done here.

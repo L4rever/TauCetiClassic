@@ -209,7 +209,7 @@ var/global/datum/controller/radio/radio_controller
 				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
 				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 					continue
-			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+			device.handle_signal(signal, TRANSMISSION_RADIO, frequency)
 		for(var/obj/device in devices["_default"])
 			if(device == source)
 				continue
@@ -220,7 +220,7 @@ var/global/datum/controller/radio/radio_controller
 				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
 				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 					continue
-			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+			device.handle_signal(signal, TRANSMISSION_RADIO, frequency)
 //					N_f++
 	else
 		for (var/next_filter in devices)
@@ -236,7 +236,7 @@ var/global/datum/controller/radio/radio_controller
 					//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
 					if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 						continue
-				device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+				device.handle_signal(signal, TRANSMISSION_RADIO, frequency)
 //						N_nf++
 
 //	log_admin("DEBUG: post_signal(source=[source] [COORD(source)],filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
@@ -270,6 +270,10 @@ var/global/datum/controller/radio/radio_controller
 
 /obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
 	return null
+
+/obj/proc/handle_signal(datum/signal/signal, receive_method, receive_param)
+	SEND_SIGNAL(src, COMSIG_RADIO_RECEIVE_SIGNAL, signal, receive_method, receive_param)
+	receive_signal(signal, receive_method, receive_param)
 
 /datum/signal
 	var/obj/source

@@ -187,7 +187,7 @@
 		if(a_left != D)
 			a_left.pulsed(0)
 	if(master)
-		master.receive_signal()
+		master.handle_signal()
 	return 1
 
 //********-Timer
